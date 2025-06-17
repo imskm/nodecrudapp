@@ -109,7 +109,7 @@ app.get('/api/v1/products', (req, res) => {
 		total: products.length,
 		items_per_page: nitems,
 	};
-	res.send(result);
+	res.send(data);
 });
 
 app.get('/api/v1/products/:id', (req, res) => {
