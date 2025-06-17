@@ -90,14 +90,25 @@ app.get('/api/v1/products', (req, res) => {
 	res.setHeader('Content-Type', 'applicationn/json');
 	let result = products;
 	let page = 1;
-	const nitems = 3;
-	console.log(req.query);
+	let nitems = 3;
+	if ((v = Number(req.query.items?.trim())) && v > 0) {
+		nitems = v;
+	}
 	if (v = req.query.q?.trim()) {
 		result = result.filter(item => item.name?.toLowerCase().includes(v.toLowerCase()));
 	}
 	if (v = req.query.page?.trim()) {
 		result = result.slice((Number(v) - 1) * nitems, (Number(v) - 1) * nitems + nitems);
 	}
+	if (v = req.query.category?.trim()) {
+		result = result.filter(item => item.category?.toLowerCase().includes(v.toLowerCase()));
+	}
+
+	const data = {
+		data: result,
+		total: products.length,
+		items_per_page: nitems,
+	};
 	res.send(result);
 });
 
