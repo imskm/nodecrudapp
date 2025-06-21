@@ -94,9 +94,9 @@ app.get('/api/v1/products', (req, res) => {
 	if ((v = Number(req.query.items?.trim())) && v > 0) {
 		nitems = v;
 	}
-	if (req.query.name?.trim() || req.query.category?.trim()) {
+	if (req.query.q?.trim() || req.query.category?.trim()) {
 		result = result.filter((item) => {
-			v = req.query.name?.trim();
+			v = req.query.q?.trim();
 			if (v && item.name?.toLowerCase().includes(v.toLowerCase())) {
 				return true;
 			}
