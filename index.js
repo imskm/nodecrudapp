@@ -94,14 +94,22 @@ app.get('/api/v1/products', (req, res) => {
 	if ((v = Number(req.query.items?.trim())) && v > 0) {
 		nitems = v;
 	}
-	if (v = req.query.q?.trim()) {
-		result = result.filter(item => item.name?.toLowerCase().includes(v.toLowerCase()));
+	if (req.query.name?.trim() || req.query.category?.trim()) {
+		result = result.filter((item) => {
+			v = req.query.name?.trim();
+			if (v && item.name?.toLowerCase().includes(v.toLowerCase())) {
+				return true;
+			}
+			v = req.query.category?.trim();
+			if (v && item.category?.toLowerCase().includes(v.toLowerCase())) {
+				return true;
+			}
+
+			return false;
+		});
 	}
 	if (v = req.query.page?.trim()) {
 		result = result.slice((Number(v) - 1) * nitems, (Number(v) - 1) * nitems + nitems);
-	}
-	if (v = req.query.category?.trim()) {
-		result = result.filter(item => item.category?.toLowerCase().includes(v.toLowerCase()));
 	}
 
 	const data = {
