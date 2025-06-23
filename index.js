@@ -15,70 +15,80 @@ const products = [
     "name": "Test product",
     "description": "Test product description",
     "price": 499,
-    "category": "Shoes"
+    "category": "Shoes",
+	"image_url": "https://placehold.co/400x400?text=Product"
   },
   {
     "id": 2,
     "name": "Running Sneakers",
     "description": "Lightweight sneakers ideal for running and daily use",
     "price": 1299,
-    "category": "Shoes"
+    "category": "Shoes",
+	"image_url": "https://placehold.co/400x400?text=Product"
   },
   {
     "id": 3,
     "name": "Wireless Earbuds",
     "description": "Compact and powerful wireless earbuds with noise cancellation",
     "price": 2199,
-    "category": "Electronics"
+    "category": "Electronics",
+	"image_url": "https://placehold.co/400x400?text=Product"
   },
   {
     "id": 4,
     "name": "Smartwatch X",
     "description": "Track your fitness and notifications with Smartwatch X",
     "price": 3499,
-    "category": "Electronics"
+    "category": "Electronics",
+	"image_url": "https://placehold.co/400x400?text=Product"
   },
   {
     "id": 5,
     "name": "Leather Wallet",
     "description": "Premium leather wallet with multiple compartments",
     "price": 799,
-    "category": "Accessories"
+    "category": "Accessories",
+	"image_url": "https://placehold.co/400x400?text=Product"
   },
   {
     "id": 6,
     "name": "Gaming Mouse",
     "description": "High precision RGB gaming mouse with customizable buttons",
     "price": 1599,
-    "category": "Electronics"
+    "category": "Electronics",
+	"image_url": "https://placehold.co/400x400?text=Product"
   },
   {
     "id": 7,
     "name": "Cotton T-Shirt",
     "description": "Soft cotton t-shirt available in multiple colors",
     "price": 499,
-    "category": "Clothing"
+    "category": "Clothing",
+	"image_url": "https://placehold.co/400x400?text=Product"
   },
   {
     "id": 8,
     "name": "Backpack Pro",
     "description": "Durable and water-resistant backpack for travel and work",
     "price": 1899,
-    "category": "Bags"
+    "category": "Bags",
+	"image_url": "https://placehold.co/400x400?text=Product"
   },
   {
     "id": 9,
     "name": "Bluetooth Speaker",
     "description": "Portable speaker with deep bass and long battery life",
     "price": 2499,
-    "category": "Electronics"
+    "category": "Electronics",
+	"image_url": "https://placehold.co/400x400?text=Product"
   },
   {
     "id": 10,
     "name": "Sports Water Bottle",
     "description": "Stainless steel insulated bottle for hot and cold drinks",
     "price": 699,
-    "category": "Fitness"
+    "category": "Fitness",
+	"image_url": "https://placehold.co/400x400?text=Product"
   }
 ];
 
@@ -91,6 +101,7 @@ app.get('/api/v1/products', (req, res) => {
 	let result = products;
 	let page = 1;
 	let nitems = 3;
+	let total = 0;
 	if ((v = Number(req.query.items?.trim())) && v > 0) {
 		nitems = v;
 	}
@@ -108,13 +119,15 @@ app.get('/api/v1/products', (req, res) => {
 			return false;
 		});
 	}
+
+	total = result.length;
 	if (v = req.query.page?.trim()) {
 		result = result.slice((Number(v) - 1) * nitems, (Number(v) - 1) * nitems + nitems);
 	}
 
 	const data = {
 		data: result,
-		total: products.length,
+		total: total,
 		items_per_page: nitems,
 	};
 	res.send(data);
