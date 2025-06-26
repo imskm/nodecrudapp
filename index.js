@@ -1,12 +1,28 @@
 const express = require('express');
 const cors = require('cors');
 
+const multer  = require('multer');
+const path = require('path');
+
 const app = express();
 const port = 3000;
 
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Set up storage (optional — stores files in /uploads)
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'public/uploads/'); // create this folder or handle it
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname)); // unique filename
+  }
+});
+
+const upload = multer({ storage });
+
 
 let lastProductId = 10;
 const products = [
@@ -163,6 +179,28 @@ app.delete('/api/v1/products/:id', (req, res) => {
 	}
 	res.send(products);
 });
+
+app.post('/api/v1/products/:id/upload-image', upload.single('file'), (req, res) => {
+	const id = req.params.id;
+	if (!(product = products.find((p) => p.id == req.params.id))) {
+		res.status(404);
+		return res.send();
+	}
+
+	// 'file' is the field name used in curl or form
+	console.log('Uploaded file:', req.file);
+
+	if (!req.file) {
+		return res.status(400).send('No file uploaded.');
+	}
+
+	product.image_url = `http://127.0.0.1:3000/uploads/${req.file.filename}`;
+	console.log(product);
+
+	res.send(product);
+});
+
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.listen(port, () => {
 	console.log(`Server is running on port ${port}`);
