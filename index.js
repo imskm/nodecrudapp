@@ -159,7 +159,7 @@ app.post('/api/v1/products', (req, res) => {
 	lastProductId += 1;
 	data['id'] = lastProductId;
 	products.push(data);
-	res.send(products);
+	res.send(data);
 });
 
 app.patch('/api/v1/products/:id', (req, res) => {
